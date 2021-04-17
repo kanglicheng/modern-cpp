@@ -11,8 +11,8 @@
 
 Write your name and email address in the comment space here:
 
-Name:
-Email:
+Name: Kang-Li Cheng	
+Email: 
 
 (...end multi-line comment.)
 ******************** */
@@ -67,7 +67,18 @@ PNG grayscale(PNG image) {
  * @return The image with a spotlight.
  */
 PNG createSpotlight(PNG image, int centerX, int centerY) {
+int xx=0, yy=0,z;	
+for (unsigned x = 0; x < image.width(); x++) {
+    for (unsigned y = 0; y < image.height(); y++) {
+			HSLAPixel & pixel = image.getPixel(x, y);
+			xx=x-centerX;
+			yy=y-centerY;
+			z=sqrt((xx*xx)+(yy*yy));
+			if(z<160) pixel.l=pixel.l-.005*z*pixel.l;
+			else pixel.l = pixel.l - 0.8*pixel.l;
 
+        }
+    }
   return image;
   
 }
@@ -84,6 +95,17 @@ PNG createSpotlight(PNG image, int centerX, int centerY) {
  * @return The illinify'd image.
 **/
 PNG illinify(PNG image) {
+	for(unsigned x = 0; x < image.width(); x++){
+		for (unsigned y = 0; y < image.height(); y++){
+			HSLAPixel & pixel = image.getPixel(x, y);
+			if(pixel.h> 101 && pixel.h < 281){
+				pixel.h = 216;
+			}
+			else{
+				pixel.h = 11;
+			}
+		}
+	}
 
   return image;
 }
@@ -102,6 +124,14 @@ PNG illinify(PNG image) {
 * @return The watermarked image.
 */
 PNG watermark(PNG firstImage, PNG secondImage) {
-
+for (unsigned x = 0; x < firstImage.width(); x++) {
+    for (unsigned y = 0; y < firstImage.height(); y++) {
+      HSLAPixel & pixel1 = firstImage.getPixel(x, y);
+      HSLAPixel & pixel2 = secondImage.getPixel(x, y);
+	if(pixel2.l==1&&pixel1.l+.2<1)
+	pixel1.l=pixel1.l+.2;	
+	
+	}
+}
   return firstImage;
 }
